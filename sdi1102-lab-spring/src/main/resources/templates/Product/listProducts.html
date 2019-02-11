@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head" />
+<body>
+	<!-- Barra de Navegación superior -->
+	<nav th:replace="fragments/nav" />
+
+	<div class="container">
+		<h2>Productos</h2>
+		<p>Los productos de la tienda son:</p>
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th class="col-md-1">id</th>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Price</th>
+						<th class="col-md-1"></th>
+						<th class="col-md-1"></th>
+						<th class="col-md-1"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="product : ${productList}">
+						<td th:text="${product.id}">1</td>
+						<td th:text="${product.Name}">Ejercicio 1</td>
+						<td th:text="${product.Description}">Ejercicio 1</td>
+						<td th:text="${product.Price}">10</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+
+</body>
+<footer th:replace="fragments/footer" />
+</html>

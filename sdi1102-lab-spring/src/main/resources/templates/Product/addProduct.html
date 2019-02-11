@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head" />
+<body>
+
+	<!-- Barra de Navegación superior -->
+	<nav th:replace="fragments/nav" />
+
+	<div class="container">
+		<h2>Agregar Producto</h2>
+		<form class="form-horizontal" method="post" action="/product/addProduct">
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="Name">Name:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="Name"
+						placeholder="Apple, Orange..." required="true" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="Description">Description:</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="Description"
+						placeholder="Perfect product for making fresh juice..." required="true" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-2" for="Price">Price:</label>
+				<div class="col-sm-10">
+					<input type="number" class="form-control" name="Price"
+						placeholder="3.75" required="true" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-primary">Crear</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</body>
+<footer th:replace="fragments/footer" />
+</html>
