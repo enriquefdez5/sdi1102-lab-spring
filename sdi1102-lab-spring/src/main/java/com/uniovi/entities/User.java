@@ -26,6 +26,12 @@ public class User {
 		this.name = name;
 		this.lastName = lastName;
 	}
+	
+	public User(String dni, String password) {
+		super();
+		this.dni = dni;
+		this.password = password;
+	}
 
 	public User() {
 	}

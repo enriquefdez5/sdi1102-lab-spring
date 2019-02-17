@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.uniovi.entities.User;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
+import com.uniovi.validators.AddUserValidator;
 import com.uniovi.validators.SignUpFormValidator;
 
 @Controller
@@ -29,6 +30,10 @@ public class UsersController {
 	@Autowired
 	private SignUpFormValidator signUpFormValidator;
 
+	@Autowired
+	private AddUserValidator addUserValidator;
+
+
 	@RequestMapping("/user/list")
 	public String getListado(Model model) {
 		model.addAttribute("usersList", usersService.getUsers());
@@ -38,18 +43,25 @@ public class UsersController {
 	@RequestMapping(value = "/user/add")
 	public String getUser(Model model) {
 		model.addAttribute("usersList", usersService.getUsers());
+		model.addAttribute("user", new User());
 		return "user/add";
 	}
 
 	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
-	public String setUser(@ModelAttribute User user) {
+	public String setUser(@Validated @ModelAttribute User user, BindingResult result) {
+		addUserValidator.validate(user, result);
+		if (result.hasErrors()) {
+			return "/user/add";
+		}
 		usersService.addUser(user);
 		return "redirect:/user/list";
 	}
 
 	@RequestMapping("/user/details/{id}")
 	public String getDetail(Model model, @PathVariable Long id) {
+		User activeUser = usersService.getUser(id);
 		model.addAttribute("user", usersService.getUser(id));
+		model.addAttribute("markList", activeUser.getMarks());
 		return "user/details";
 	}
 
@@ -68,7 +80,12 @@ public class UsersController {
 
 	@RequestMapping(value = "/user/edit/{id}", method = RequestMethod.POST)
 	public String setEdit(Model model, @PathVariable Long id, @ModelAttribute User user) {
+		User userDB = usersService.getUser(id);
 		user.setId(id);
+
+		// password no modificable, así que conserva la que ya tenía
+		user.setPassword(userDB.getPassword());
+		user.setPasswordConfirm(userDB.getPasswordConfirm());
 		usersService.addUser(user);
 		return "redirect:/user/details/" + id;
 	}

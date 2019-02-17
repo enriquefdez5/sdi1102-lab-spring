@@ -7,19 +7,23 @@
 	<nav th:replace="fragments/nav" />
 
 	<div class="container">
-		<h2 th:text="#{marks}">Notas</h2>
-		<p th:text="#{marks.list.title}">Las notas que actualmente figuran en el sistema son las
-			siguientes:</p>
-		<button type="button" id="updateButton" class="btn btn-default" th:text="#{options.update}">Actualizar</button>
-		<script>
-			$("#updateButton").click(function() {
-				$("#tableMarks").load('/mark/list/update');
-			});
-		</script>
-		<div class="table-responsive">
+		<h2 th:text="#{user.details.title}">Detalles del usuario</h2>
 
-			<table class="table table-hover" th:fragment="tableMarks"
-				id="tableMarks">
+		<div class="panel panel-default">
+			<div class="panel-heading" th:text="#{user.dni}">DNI</div>
+			<div class="panel-body" th:text="${user.dni}">28276</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading" th:text="#{user.name}">Nombre</div>
+			<div class="panel-body" th:text="${user.name}">Ejercicio 1</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading" th:text="#{user.lastName}">Apellidos</div>
+			<div class="panel-body" th:text="${user.lastName}">100</div>
+		</div>
+		<h2 th:text="#{home.user.marks}">Notas del usuario</h2>
+		<div class="table-responsive">
+			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th class="col-md-1">id</th>
