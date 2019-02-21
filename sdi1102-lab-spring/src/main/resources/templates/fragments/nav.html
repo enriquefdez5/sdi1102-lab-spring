@@ -10,23 +10,28 @@
 			<img src="/img/student-48.png" alt="logo" />
 		</div>
 		<div class="collapse navbar-collapse" id="myNavbar">
-			<ul class="nav navbar-nav">
+			<ul class="nav navbar-nav" sec:authorize="isAuthenticated()">
 				<li><a href="/">Home</a></li>
 				<li id="marks-menu" class="dropdown"><a class="dropdown-toggle"
-					data-toggle="dropdown" href="#" th:text="#{marks.manage}"> Gestión de notas <span
-						class="caret"></span>
+					data-toggle="dropdown" href="#" th:text="#{marks.manage}">
+						Gestión de notas <span class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="/mark/add" th:text="#{marks.add}">Agregar Nota</a></li>
+						<li sec:authorize="hasRole('ROLE_PROFESSOR')"><a
+							href="/mark/add" th:text="#{marks.add}">Agregar Nota</a></li>
 						<li><a href="/mark/list" th:text="#{marks.see}">Ver Notas</a></li>
 					</ul></li>
-				<li id="users-menu" class="dropdown"><a class="dropdown-toggle"
-					data-toggle="dropdown" href="#" th:text="#{users.manage}"> Gestión de Usuarios <span
+				<li id="users-menu" class="dropdown"
+					sec:authorize="hasRole('ROLE_ADMIN')"><a
+					class="dropdown-toggle" data-toggle="dropdown" href="#"
+					th:text="#{users.manage}"> Gestión de Usuarios <span
 						class="caret"></span>
 				</a>
 					<ul class="dropdown-menu">
-						<li><a href="/user/add" th:text="#{users.add}">Agregar usuario</a></li>
-						<li><a href="/user/list" th:text="#{users.see}">Ver Usuarios</a></li>
+						<li><a href="/user/add" th:text="#{users.add}">Agregar
+								usuario</a></li>
+						<li><a href="/user/list" th:text="#{users.see}">Ver
+								Usuarios</a></li>
 					</ul></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
@@ -48,12 +53,19 @@
 								th:text="#{language.es}">Español</span>
 						</a></li>
 					</ul></li>
-				<li><a href="/signup" th:text="#{signup.message}"> <span
-						class="glyphicon glyphicon-user" th:text="#{user.signup.title}"></span> Registrate
+				<li sec:authorize="!isAuthenticated()"><a href="/signup"
+					th:text="#{signup.message}"> <span
+						class="glyphicon glyphicon-user" th:text="#{user.signup.title}"></span>
+						Registrate
 				</a></li>
-				<li><a href="/login" th:text="#{login.message}"> <span
-						class="glyphicon glyphicon-log-in" th:text="#{user.login.title}"></span> Identifícate
+				<li sec:authorize="!isAuthenticated()"><a href="/login"
+					th:text="#{login.message}"> <span
+						class="glyphicon glyphicon-log-in" th:text="#{user.login.title}"></span>
+						Identifícate
 				</a></li>
+				<li sec:authorize="isAuthenticated()"><a href="/logout"> <span
+						class="glyphicon glyphicon-log-out"></span> Desconectar
+				</a>
 			</ul>
 		</div>
 	</div>
