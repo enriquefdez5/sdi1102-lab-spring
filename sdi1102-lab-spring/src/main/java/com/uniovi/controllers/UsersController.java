@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.uniovi.entities.User;
+import com.uniovi.services.RolesService;
 import com.uniovi.services.SecurityService;
 import com.uniovi.services.UsersService;
 import com.uniovi.validators.AddUserValidator;
@@ -33,6 +34,8 @@ public class UsersController {
 	@Autowired
 	private AddUserValidator addUserValidator;
 
+	@Autowired
+	private RolesService rolesService;
 
 	@RequestMapping("/user/list")
 	public String getListado(Model model) {
@@ -44,8 +47,16 @@ public class UsersController {
 	public String getUser(Model model) {
 		model.addAttribute("usersList", usersService.getUsers());
 		model.addAttribute("user", new User());
+		model.addAttribute("rolesList", rolesService.getRoles());
+
 		return "user/add";
 	}
+
+//	@RequestMapping(value = "/user/add")
+//	public String getUser(Model model) {
+//		model.addAttribute("rolesList", rolesService.getRoles());
+//		return "user/add";
+//	}
 
 	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
 	public String setUser(@Validated @ModelAttribute User user, BindingResult result) {
@@ -102,7 +113,9 @@ public class UsersController {
 		if (result.hasErrors()) {
 			return "signup";
 		}
+		user.setRole(rolesService.getRoles()[0]);
 		usersService.addUser(user);
+
 		securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
 		return "redirect:home";
 	}
