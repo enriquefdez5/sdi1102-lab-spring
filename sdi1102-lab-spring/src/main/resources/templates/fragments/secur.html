@@ -1,0 +1,3 @@
+<a th:href="${'/mark/edit/' + mark.id}"
+							th:text="#{options.modify}"
+							sec:authorize="hasRole('ROLE_PROFESSOR')">modificar</a>

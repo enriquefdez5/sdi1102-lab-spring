@@ -1,7 +1,11 @@
 package com.uniovi;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,8 +41,19 @@ public class CustomConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		int page = 0;
-		int size = 2;
+		Properties p = new Properties();
+		try {
+			p.load(new FileReader("src/main/resources/application.properties"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int page = Integer.parseInt(p.getProperty("spring.data.web.pageable.page-parameter"));
+		int size = Integer.parseInt(p.getProperty("spring.data.web.pageable.default-page-size"));
 		PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
 		resolver.setFallbackPageable(PageRequest.of(page, size));
 		argumentResolvers.add(resolver);

@@ -1,6 +1,7 @@
 package com.uniovi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.uniovi.entities.User;
 import com.uniovi.services.RolesService;
@@ -38,25 +40,36 @@ public class UsersController {
 	private RolesService rolesService;
 
 	@RequestMapping("/user/list")
-	public String getListado(Model model) {
-		model.addAttribute("usersList", usersService.getUsers());
+	public String getListado(Model model, Pageable pageable, @RequestParam(value = "", required = false) String searchText) {
+		
+		if (searchText != null && !searchText.isEmpty()) {
+			model.addAttribute("usersList", usersService.searchUsersByDescriptionAndNameAndDni(pageable, searchText));
+		} else {
+			model.addAttribute("usersList", usersService.getUsers(pageable));
+		}
+		model.addAttribute("page", usersService.getUsers(pageable));
 		return "user/list";
 	}
+//	@RequestMapping("/user/list")
+//	public String getListado(Model model, Pageable pageable, @RequestParam(value = "", required = false) String searchText) {
+//		
+//		if (searchText != null && !searchText.isEmpty()) {
+//			model.addAttribute("usersList", usersService.searchUsersByDescriptionAndNameAndDni(pageable, searchText));
+//		} else {
+//			model.addAttribute("usersList", usersService.getUsers(pageable));
+//		}
+//		model.addAttribute("page", "usersList");
+//		return "user/list";
+//	}
 
 	@RequestMapping(value = "/user/add")
-	public String getUser(Model model) {
-		model.addAttribute("usersList", usersService.getUsers());
+	public String getUser(Model model,Pageable pageable) {
+		model.addAttribute("usersList", usersService.getUsers(pageable));
 		model.addAttribute("user", new User());
 		model.addAttribute("rolesList", rolesService.getRoles());
 
 		return "user/add";
 	}
-
-//	@RequestMapping(value = "/user/add")
-//	public String getUser(Model model) {
-//		model.addAttribute("rolesList", rolesService.getRoles());
-//		return "user/add";
-//	}
 
 	@RequestMapping(value = "/user/add", method = RequestMethod.POST)
 	public String setUser(@Validated @ModelAttribute User user, BindingResult result) {
@@ -125,12 +138,25 @@ public class UsersController {
 		return "login";
 	}
 
+//	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
+//	public String home(Model model) {
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		String dni = auth.getName();
+//		User activeUser = usersService.getUserByDni(dni);
+//		model.addAttribute("markList", activeUser.getMarks());
+//		return "home";
+//	}
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
 	public String home(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String dni = auth.getName();
 		User activeUser = usersService.getUserByDni(dni);
-		model.addAttribute("markList", activeUser.getMarks());
+		if (!activeUser.getRole().equals("ROLE_PROFESSOR")) {
+			model.addAttribute("markList", activeUser.getMarks());
+		}
+		else {
+
+		}
 		return "home";
 	}
 

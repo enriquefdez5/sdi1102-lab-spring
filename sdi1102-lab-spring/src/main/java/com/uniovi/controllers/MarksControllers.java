@@ -93,17 +93,31 @@ public class MarksControllers {
 		return "redirect:/mark/list";
 	}
 
+//	@RequestMapping(value = "/mark/add")
+//	public String getMark(Model model) {
+//		model.addAttribute("usersList", usersService.getUsers());
+//		model.addAttribute("mark", new Mark());
+//		return "mark/add";
+//	}
+	
 	@RequestMapping(value = "/mark/add")
-	public String getMark(Model model) {
-		model.addAttribute("usersList", usersService.getUsers());
+	public String getMark(Model model, Pageable pageable) {
+		model.addAttribute("usersList", usersService.getUsers(pageable));
 		model.addAttribute("mark", new Mark());
 		return "mark/add";
 	}
 
+//	@RequestMapping(value = "/mark/edit/{id}")
+//	public String getEdit(Model model, @PathVariable Long id) {
+//		model.addAttribute("mark", marksService.getMark(id));
+//		model.addAttribute("usersList", usersService.getUsers());
+//		return "mark/edit";
+//	}
+	
 	@RequestMapping(value = "/mark/edit/{id}")
-	public String getEdit(Model model, @PathVariable Long id) {
+	public String getEdit(Model model, Pageable pageable, @PathVariable Long id) {
 		model.addAttribute("mark", marksService.getMark(id));
-		model.addAttribute("usersList", usersService.getUsers());
+		model.addAttribute("usersList", usersService.getUsers(pageable));
 		return "mark/edit";
 	}
 
