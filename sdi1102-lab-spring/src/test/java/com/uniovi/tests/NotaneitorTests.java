@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import com.uniovi.tests.pageobjects.PO_HomeView;
+import com.uniovi.tests.pageobjects.PO_LoginView;
 import com.uniovi.tests.pageobjects.PO_Properties;
 import com.uniovi.tests.pageobjects.PO_RegisterView;
 import com.uniovi.tests.pageobjects.PO_View;
@@ -119,7 +120,7 @@ public class NotaneitorTests {
 		PO_RegisterView.fillForm(driver, "99999990A", "Josefo", "Perez", "77777", "77777");
 		PO_View.getP();
 		// COmprobamos el error de DNI repetido.
-		PO_RegisterView.checkKey(driver, "Error.signup.dni.duplicate", PO_Properties.getSPANISH());
+		PO_RegisterView.checkKey(driver, "Error.signup.dni.duplicate", PO_Properties.getENGLISH());
 		// Rellenamos el formulario.
 		PO_RegisterView.fillForm(driver, "99999990B", "Jose", "Perez", "77777", "77777");
 		// COmprobamos el error de Nombre corto .
@@ -128,11 +129,78 @@ public class NotaneitorTests {
 		PO_RegisterView.fillForm(driver, "99999990B", "Josefo", "Per", "77777", "77777");
 		PO_RegisterView.checkKey(driver, "Error.signup.lastName.length", PO_Properties.getSPANISH());
 		// Comprobamos contraseña corta.
-		PO_RegisterView.fillForm(driver, "99999990B", "Josefo", "Per", "777", "777");
+		PO_RegisterView.fillForm(driver, "99999990B", "Josefo", "Perez", "777", "777");
 		PO_RegisterView.checkKey(driver, "Error.signup.password.length", PO_Properties.getSPANISH());
 		// Comprobamos contraseña no coincide.
-		PO_RegisterView.fillForm(driver, "99999990B", "Josefo", "Per", "666", "777");
+		PO_RegisterView.fillForm(driver, "99999990B", "Josefo", "Perez", "666666", "777777");
 		PO_RegisterView.checkKey(driver, "Error.signup.passwordConfirm.coincidence", PO_Properties.getSPANISH());
 
 	}
+
+	// PR07. Prueba del formulario de login con rol usuario. Login con datos
+	// correctos
+	@Test
+	public void PR07() {
+		// Vamos al formulario login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "99999990A", "123456");
+		// Comprobamos que entramos en la sección privada
+		PO_View.checkElement(driver, "text", "Notas del usuario");
+	}
+
+	// PR08. Prueba del formulario de login con rol profesor. Login con datos
+	// correctos
+	@Test
+	public void PR08() {
+		// Vamos al formulario login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "99999993D", "123456");
+		// Comprobamos que entramos en la sección privada
+		// TODO salen notas???
+		PO_View.checkElement(driver, "text", "Notas del usuario");
+	}
+
+	// PR09. Identificación válida con usuario de ROL administrador. Login con datos
+	// correctos
+	@Test
+	public void PR09() {
+		// Vamos al formulario login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "99999988F", "123456");
+		// Comprobamos que entramos en la sección privada
+
+		PO_LoginView.checkElement(driver, "text", "Notas del usuario");
+	}
+
+	// PR10. Identificación inválida con usuario de ROL alumno. Login con datos
+	// incorrectos
+	@Test
+	public void PR10() {
+		// Vamos al formulario login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "99999999990A", "123456");
+		// Comprobamos que entramos en la sección privada
+
+		PO_LoginView.checkElement(driver, "text", "Idéntificate");
+	}
+
+	// PR11. Identificación válida y desconexión con usuario de ROL usuario
+	@Test
+	public void PR11() {
+		// Vamos al formulario login
+		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		// Rellenamos el formulario.
+		PO_LoginView.fillForm(driver, "99999990A", "123456");
+		// Comprobamos que entramos en la sección privada
+		PO_LoginView.checkElement(driver, "text", "Notas del usuario");
+		PO_HomeView.clickOption(driver, "logout", "class", "btn btn-primary");
+		PO_LoginView.checkElement(driver, "text", "Idéntificate");
+
+
+	}
+
 }
