@@ -1,8 +1,12 @@
 package com.uniovi.tests.pageobjects;
 
 import static org.junit.Assert.assertTrue;
+
 import java.util.List;
-import org.openqa.selenium.*;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
 import com.uniovi.tests.util.SeleniumUtils;
 
 public class PO_NavView extends PO_View {
@@ -19,8 +23,8 @@ public class PO_NavView extends PO_View {
 	 *        destino.
 	 */
 	public static void clickOption(WebDriver driver, String textOption, String criterio, String textoDestino) {
-		// CLickamos en la opción de registro y esperamos a que se cargue el enlace de
-		Registro.List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "@href", textOption,
+		// CLickamos en la opción de registro y esperamos a que se cargue el enlace de Registro.
+		List<WebElement> elementos = SeleniumUtils.EsperaCargaPagina(driver, "@href", textOption,
 				getTimeout());
 		// Tiene que haber un sólo elemento.
 		assertTrue(elementos.size() == 1);
